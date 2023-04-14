@@ -6,7 +6,7 @@
 /*   By: marias-e <marias-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 11:03:04 by marias-e          #+#    #+#             */
-/*   Updated: 2023/04/13 13:06:43 by marias-e         ###   ########.fr       */
+/*   Updated: 2023/04/14 12:53:01 by marias-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,10 @@
 # define FREE	0
 # define RIGHT	1
 # define LEFT	2
+
+# define EAT	0
+# define NAP	1
+# define THINK	2
 
 enum e_conditions
 {

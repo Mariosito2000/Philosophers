@@ -1,30 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_routine.c                                       :+:      :+:    :+:   */
+/*   ft_fork.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marias-e <marias-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/27 12:50:59 by marias-e          #+#    #+#             */
-/*   Updated: 2023/04/14 12:57:02 by marias-e         ###   ########.fr       */
+/*   Created: 2023/04/14 13:17:31 by marias-e          #+#    #+#             */
+/*   Updated: 2023/04/14 13:23:00 by marias-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	*ft_routine(t_philo *philo)
+void	ft_take_fork(t_philo *philo, int fork)
 {
-	ft_set_init_time(&philo); //reset death time
-	while (ft_mute_death(&philo))
-	{
-		ft_get_time(&philo);
-		ft_check_death(&philo);
-		if (philo->activity == EAT)
-			if (ft_eat(&philo))
-				break ;
-		if (philo->activity == NAP)
-			ft_nap(&philo);
-		if (philo->activity == THINK)
-			ft_think(&philo);
-	}
+	if (fork == LEFT)
+		*philo->right_hand = LEFT;
+	else
+		*philo->left_hand = RIGHT;
+	pthread_mutex_lock(&philo->arg->printer_mutex);
+	printf("%d %d has taken a fork\n", philo->last_meal, philo->id);
+	pthread_mutex_unlock(&philo->arg->printer_mutex);
 }
