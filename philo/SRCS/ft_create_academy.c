@@ -6,7 +6,7 @@
 /*   By: marias-e <marias-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 16:45:20 by marias-e          #+#    #+#             */
-/*   Updated: 2023/04/13 13:32:53 by marias-e         ###   ########.fr       */
+/*   Updated: 2023/04/17 14:14:12 by marias-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ static void	ft_initialize_philo(t_philo *philos, int id, t_arg *arg)
 		philos->right_hand = &(arg->forkstate[0]);
 	else
 		philos->right_hand = &(arg->forkstate[id]);
-	philos->dead = 0;
 	philos->meals_left = arg->conditions[eating_times];
 	philos->arg = arg;
 	if (arg->conditions[n_philos] > 1)
@@ -32,6 +31,7 @@ static void	ft_initialize_philo(t_philo *philos, int id, t_arg *arg)
 		else
 			philos->right_m = &(arg->fork[id]);
 	}
+	ft_set_init_time(philos);
 }
 
 int	ft_init_mutex(t_arg *arg)
@@ -39,10 +39,16 @@ int	ft_init_mutex(t_arg *arg)
 	int	i;
 
 	i = 0;
+	arg->dead = 0;
+	if (pthread_mutex_init(&arg->dead_mutex, 0))
+		return (1);
+	if (pthread_mutex_init(&arg->printer_mutex, 0))
+		return (1);
 	while (i < arg->conditions[n_philos])
 	{
 		if (pthread_mutex_init(&arg->fork[i], 0))
 			return (1);
+		arg->forkstate[i] = 0;
 		i++;
 	}
 	return (0);
@@ -56,16 +62,17 @@ int	ft_create_threads(t_arg *arg, t_philo **philos)
 	while (i < arg->conditions[n_philos])
 	{
 		ft_initialize_philo(&((*philos)[i]), i + 1, arg);
-		if (pthread_create(&((*philos)[i].thread), NULL, (void *)&ft_hilito,
+		if (pthread_create(&((*philos)[i].thread), NULL, (void *)&ft_routine,
 			&((*philos)[i])))
 			return (1);
 		i += 2;
 	}
+	usleep (50);
 	i = 1;
 	while (i < arg->conditions[n_philos])
 	{
 		ft_initialize_philo(&((*philos)[i]), i + 1, arg);
-		if (pthread_create(&((*philos)[i].thread), NULL, (void *)&ft_hilito,
+		if (pthread_create(&((*philos)[i].thread), NULL, (void *)&ft_routine,
 			&((*philos)[i])))
 			return (1);
 		i += 2;
@@ -89,6 +96,9 @@ int	ft_join(t_arg *arg, t_philo **philos)
 
 int	ft_create_academy(t_arg *arg, t_philo **philos)
 {
+	arg->forkstate = malloc(sizeof(int) * arg->conditions[n_philos]);
+	if (!arg->forkstate)
+		return (12);
 	arg->fork = malloc(sizeof(pthread_mutex_t) * arg->conditions[n_philos]);
 	if (!arg->fork)
 		return (12);
@@ -103,29 +113,3 @@ int	ft_create_academy(t_arg *arg, t_philo **philos)
 		return (1);
 	return (0);
 }
-
-/* 	while (i < arg->conditions[n_philos])
-	{
-		if (pthread_mutex_init(&(arg->fork[i]), NULL))
-			return (1);
-		ft_initialize_philo(&((*philos)[i]), i + 1, arg);
-		if (pthread_create(&((*philos)[i].thread), NULL, (void *)&ft_hilito,
-			&((*philos)[i])))
-			return (1);
-		if (pthread_join((*philos)[i].thread, NULL))
-			return (1);
-		i += 2;
-	}
-	i = 1;
-	while (i < arg->conditions[n_philos])
-	{
-		if (pthread_mutex_init(&(arg->fork[i]), NULL))
-			return (1);
-		ft_initialize_philo(&((*philos)[i]), i + 1, arg);
-		if (pthread_create(&((*philos)[i].thread), NULL, (void *)&ft_hilito,
-			&((*philos)[i])))
-			return (1);
-		if (pthread_join((*philos)[i].thread, NULL))
-			return (1);
-		i += 2;
-	} */

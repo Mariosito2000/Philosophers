@@ -6,7 +6,7 @@
 /*   By: marias-e <marias-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 11:36:04 by marias-e          #+#    #+#             */
-/*   Updated: 2023/04/13 13:18:05 by marias-e         ###   ########.fr       */
+/*   Updated: 2023/04/17 14:05:13 by marias-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,11 @@ int	main(int argc, char **argv)
 
 	philos = NULL;
 	if (argc < 5 || argc > 6)
-		return (0);
+		return (1);
 	if (ft_manage_inputs(argc, argv, arg.conditions))
-		return (0);
-	if (gettimeofday(&(arg.time), NULL))
-		return (0);
-	int	i = 0;
-	while (i < 5)
-	{
-		printf("cond %d = %d\n", i, arg.conditions[i]);
-		i++;
-	}
+		return (1);
 	if (ft_create_academy(&arg, &philos))
-		return (0);
-	while(arg.conditions[life_expectancy]);
+		return (1);
 	return (0);
 }
 

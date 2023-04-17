@@ -6,7 +6,7 @@
 /*   By: marias-e <marias-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 11:03:04 by marias-e          #+#    #+#             */
-/*   Updated: 2023/04/14 12:53:01 by marias-e         ###   ########.fr       */
+/*   Updated: 2023/04/17 14:13:13 by marias-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,27 +45,26 @@ enum e_conditions
 typedef struct s_arg
 {
 	int				conditions[5];
-	struct timeval	time;
 	pthread_mutex_t	*fork;
 	pthread_mutex_t	printer_mutex;
 	pthread_mutex_t	dead_mutex;
 	int				dead;
-	int				*forkstate; // free, left, right
+	int				*forkstate;
 }	t_arg;
 
 typedef struct s_philo
 {
 	int				id;
 	pthread_t		thread;
-	int				time;
-	int				last_meal;	// last meal mark al empezar la función
+	long int		start_time;
+	long int		time;
+	long int		last_meal;
 	pthread_mutex_t	*right_m;
 	pthread_mutex_t	*left_m;
 	int				*left_hand;
-	int				*right_hand; // puntero a la mesa
-	int				meals_left;	// number of meals
-	int				dead;		// 0 alive, 1 dead
-	int				activity;	// 0 pensar, 1-2 coger, 3 comer, 4 dormir
+	int				*right_hand;
+	int				meals_left;
+	int				activity;
 	t_arg			*arg;
 }	t_philo;
 
@@ -77,6 +76,16 @@ int			ft_strchr_mod(const char *s, int c);
 int			ft_manage_inputs(int argc, char **argv, int	*conditions);
 
 int			ft_create_academy(t_arg *arg, t_philo **philos);
+void		ft_set_init_time(t_philo *philo);
+
+void		ft_routine(t_philo *philo);
+void		ft_get_time(t_philo *philo);
+int			ft_mute_death(t_philo *philo);
+int			ft_check_death(t_philo *philo);
+int			ft_eat(t_philo *philo);
+void		ft_take_fork(t_philo *philo, int fork);
+void		ft_nap(t_philo *philo);
+void		ft_think(t_philo *philo);
 
 void		*ft_hilito(t_philo *philo);
 
