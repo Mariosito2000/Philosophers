@@ -6,7 +6,7 @@
 /*   By: marias-e <marias-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 16:45:20 by marias-e          #+#    #+#             */
-/*   Updated: 2023/04/18 13:26:22 by marias-e         ###   ########.fr       */
+/*   Updated: 2023/04/18 17:23:05 by marias-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@ static void	ft_initialize_philo(t_philo *philos, int id, t_arg *arg)
 {
 	philos->id = id;
 	philos->activity = 0;
+	philos->meals_left = arg->conditions[eating_times];
+	philos->arg = arg;
 	philos->left_hand = &(arg->forkstate[id - 1]);
 	if (id == arg->conditions[n_philos])
 		philos->right_hand = &(arg->forkstate[0]);
 	else
 		philos->right_hand = &(arg->forkstate[id]);
-	philos->meals_left = arg->conditions[eating_times];
-	philos->arg = arg;
-		philos->left_m = &(arg->fork[id - 1]);
+	philos->left_m = &(arg->fork[id - 1]);
 	if (id == arg->conditions[n_philos])
 		philos->right_m = &(arg->fork[0]);
 	else
@@ -35,6 +35,8 @@ int	ft_init_mutex(t_arg *arg, t_philo **philos)
 	int	i;
 
 	i = 0;
+	arg->satisfaction = arg->conditions[n_philos];
+	arg->can_print = 1;
 	arg->dead = 0;
 	if (pthread_mutex_init(&arg->dead_mutex, 0))
 		return (1);

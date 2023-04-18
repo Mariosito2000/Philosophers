@@ -6,7 +6,7 @@
 /*   By: marias-e <marias-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 11:03:04 by marias-e          #+#    #+#             */
-/*   Updated: 2023/04/18 13:09:47 by marias-e         ###   ########.fr       */
+/*   Updated: 2023/04/18 16:41:15 by marias-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ typedef struct s_arg
 	pthread_mutex_t	printer_mutex;
 	pthread_mutex_t	dead_mutex;
 	int				dead;
+	int				can_print;
+	int				satisfaction;
 	int				*forkstate;
 	long int		start_time;
 }	t_arg;

@@ -6,7 +6,7 @@
 /*   By: marias-e <marias-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 10:27:44 by marias-e          #+#    #+#             */
-/*   Updated: 2023/04/18 13:19:23 by marias-e         ###   ########.fr       */
+/*   Updated: 2023/04/18 17:45:59 by marias-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,15 @@ int	ft_check_death(t_philo *philo)
 	if (philo->time - philo->last_meal
 		>= philo->arg->conditions[life_expectancy] * 1000)
 	{
-		pthread_mutex_lock(&philo->arg->printer_mutex);
 		pthread_mutex_lock(&philo->arg->dead_mutex);
-		ft_get_time(philo);
-		if (!philo->arg->dead)
-			printf("%ld %d died\n", (philo->time / 1000)
-				- (philo->arg->start_time / 1000), philo->id);
 		philo->arg->dead = 1;
 		pthread_mutex_unlock(&philo->arg->dead_mutex);
+		pthread_mutex_lock(&philo->arg->printer_mutex);
+		ft_get_time(philo);
+		if (philo->arg->can_print)
+			printf("\e[31m%ld %d died\n\e[0m", (philo->time / 1000)
+				- (philo->arg->start_time / 1000), philo->id);
+		philo->arg->can_print = 0;
 		pthread_mutex_unlock(&philo->arg->printer_mutex);
 		return (1);
 	}
@@ -35,12 +36,21 @@ static void	ft_dessert(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->arg->printer_mutex);
 	ft_get_time(philo);
-	printf("%ld %d is eating\n", (philo->time / 1000) - (philo->arg->start_time
-			/ 1000), philo->id);
+	if (philo->arg->can_print)
+		printf("\e[32m%ld %d is eating\n\e[0m", (philo->time / 1000)
+			- (philo->arg->start_time / 1000), philo->id);
+	if (philo->meals_left == 0)
+		philo->arg->satisfaction--;
+	if (philo->arg->satisfaction == 0)
+	{
+		philo->arg->can_print = 0;
+		pthread_mutex_lock(&philo->arg->dead_mutex);
+		philo->arg->dead = 1;
+		pthread_mutex_unlock(&philo->arg->dead_mutex);
+	}
 	pthread_mutex_unlock(&philo->arg->printer_mutex);
 	philo->last_meal = philo->time;
-	if (philo->meals_left > 0)
-		philo->meals_left--;
+	philo->meals_left--;
 }
 
 int	ft_eat(t_philo *philo)
@@ -76,8 +86,9 @@ void	ft_nap(t_philo *philo)
 	{
 		pthread_mutex_lock(&philo->arg->printer_mutex);
 		ft_get_time(philo);
-		printf("%ld %d is sleeping\n", (philo->time / 1000)
-			- (philo->arg->start_time / 1000), philo->id);
+		if (philo->arg->can_print)
+			printf("\e[35m%ld %d is sleeping\n\e[0m", (philo->time / 1000)
+				- (philo->arg->start_time / 1000), philo->id);
 		pthread_mutex_unlock(&philo->arg->printer_mutex);
 		pthread_mutex_lock(philo->right_m);
 		*philo->right_hand = FREE;
@@ -97,8 +108,9 @@ void	ft_think(t_philo *philo)
 	{
 		pthread_mutex_lock(&philo->arg->printer_mutex);
 		ft_get_time(philo);
-		printf("%ld %d is thinking\n", (philo->time
-				/ 1000) - (philo->arg->start_time / 1000), philo->id);
+		if (philo->arg->can_print)
+			printf("\e[36m%ld %d is thinking\n\e[0m", (philo->time
+					/ 1000) - (philo->arg->start_time / 1000), philo->id);
 		pthread_mutex_unlock(&philo->arg->printer_mutex);
 		philo->activity = EAT;
 	}

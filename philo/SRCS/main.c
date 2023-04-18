@@ -6,7 +6,7 @@
 /*   By: marias-e <marias-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 11:36:04 by marias-e          #+#    #+#             */
-/*   Updated: 2023/04/18 13:20:06 by marias-e         ###   ########.fr       */
+/*   Updated: 2023/04/18 18:13:24 by marias-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,10 @@ int	main(int argc, char **argv)
 		return (1);
 	if (ft_create_academy(&arg, &philos))
 		return (1);
-	printf("ADIEU\n");
 	ft_destroy_mutex(&arg);
 	//ft_free(philos);
 	return (0);
 }
 
-//INICIALIZAR ESTRUCTURAS A 0 PARA CHECKEAR SI HACER FREE
-//LIBERAR TODO ANTES DE CADA RETURN
+// INICIALIZAR ESTRUCTURAS A 0 PARA CHECKEAR SI HACER FREE
+// LIBERAR TODO ANTES DE CADA RETURN
