@@ -1,24 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_hilito.c                                        :+:      :+:    :+:   */
+/*   ft_clean.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marias-e <marias-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/11 16:33:11 by marias-e          #+#    #+#             */
-/*   Updated: 2023/03/27 13:56:16 by marias-e         ###   ########.fr       */
+/*   Created: 2023/04/18 12:50:58 by marias-e          #+#    #+#             */
+/*   Updated: 2023/04/18 12:54:43 by marias-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	*ft_hilito(t_philo *philo)
+void	ft_destroy_mutex(t_arg *arg)
 {
-	pthread_mutex_lock(&(philo->arg->fork[1]));
-	printf("Life = %d | ID = %d\n",
-		philo->arg->conditions[life_expectancy], philo->id);
-	//usleep(1000000);
-	philo->arg->conditions[life_expectancy]--;
-	pthread_mutex_unlock(&(philo->arg->fork[1]));
-	return (0);
+	int	i;
+
+	i = 0;
+	pthread_mutex_destroy(&arg->dead_mutex);
+	pthread_mutex_destroy(&arg->printer_mutex);
+	while (i < arg->conditions[n_philos])
+	{
+		pthread_mutex_destroy(&(arg->fork[i]));
+		i++;
+	}
 }

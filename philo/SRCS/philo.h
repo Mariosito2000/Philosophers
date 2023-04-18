@@ -6,7 +6,7 @@
 /*   By: marias-e <marias-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 11:03:04 by marias-e          #+#    #+#             */
-/*   Updated: 2023/04/17 14:13:13 by marias-e         ###   ########.fr       */
+/*   Updated: 2023/04/18 13:09:47 by marias-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@
 # define LEFT	2
 
 # define EAT	0
-# define NAP	1
-# define THINK	2
+# define NAP	2
+# define THINK	3
 
 enum e_conditions
 {
@@ -50,13 +50,13 @@ typedef struct s_arg
 	pthread_mutex_t	dead_mutex;
 	int				dead;
 	int				*forkstate;
+	long int		start_time;
 }	t_arg;
 
 typedef struct s_philo
 {
 	int				id;
 	pthread_t		thread;
-	long int		start_time;
 	long int		time;
 	long int		last_meal;
 	pthread_mutex_t	*right_m;
@@ -76,7 +76,6 @@ int			ft_strchr_mod(const char *s, int c);
 int			ft_manage_inputs(int argc, char **argv, int	*conditions);
 
 int			ft_create_academy(t_arg *arg, t_philo **philos);
-void		ft_set_init_time(t_philo *philo);
 
 void		ft_routine(t_philo *philo);
 void		ft_get_time(t_philo *philo);
@@ -87,6 +86,6 @@ void		ft_take_fork(t_philo *philo, int fork);
 void		ft_nap(t_philo *philo);
 void		ft_think(t_philo *philo);
 
-void		*ft_hilito(t_philo *philo);
+void		ft_destroy_mutex(t_arg *arg);
 
 #endif
