@@ -6,7 +6,7 @@
 /*   By: marias-e <marias-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 12:50:58 by marias-e          #+#    #+#             */
-/*   Updated: 2023/04/18 12:54:43 by marias-e         ###   ########.fr       */
+/*   Updated: 2023/04/19 13:31:58 by marias-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,14 @@ void	ft_destroy_mutex(t_arg *arg)
 		pthread_mutex_destroy(&(arg->fork[i]));
 		i++;
 	}
+}
+
+void	ft_free(t_philo **philos, t_arg *arg)
+{
+	if (philos && *philos)
+		free(*philos);
+	if (arg->fork)
+		free(arg->fork);
+	if (arg->forkstate)
+		free(arg->forkstate);
 }

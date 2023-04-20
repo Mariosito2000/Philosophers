@@ -6,7 +6,7 @@
 /*   By: marias-e <marias-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 16:45:20 by marias-e          #+#    #+#             */
-/*   Updated: 2023/04/18 17:23:05 by marias-e         ###   ########.fr       */
+/*   Updated: 2023/04/20 11:41:10 by marias-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static int	ft_create_threads(t_arg *arg, t_philo **philos)
 			return (1);
 		i += 2;
 	}
-	usleep (50);
+	usleep (100);
 	i = 1;
 	while (i < arg->conditions[n_philos])
 	{
@@ -100,10 +100,10 @@ int	ft_create_academy(t_arg *arg, t_philo **philos)
 		return (12);
 	arg->fork = malloc(sizeof(pthread_mutex_t) * arg->conditions[n_philos]);
 	if (!arg->fork)
-		return (12);//ft_free(philos, 0));
+		return (12);
 	*philos = malloc(sizeof(t_philo) * arg->conditions[n_philos]);
 	if (!*philos)
-		return (12);//ft_free(philos, 1));
+		return (12);
 	if (ft_init_mutex(arg, philos))
 		return (1);
 	gettimeofday(&time, NULL);

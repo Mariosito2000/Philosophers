@@ -6,7 +6,7 @@
 /*   By: marias-e <marias-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 11:03:04 by marias-e          #+#    #+#             */
-/*   Updated: 2023/04/18 16:41:15 by marias-e         ###   ########.fr       */
+/*   Updated: 2023/04/19 17:26:13 by marias-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@
 # define LEFT	2
 
 # define EAT	0
-# define NAP	2
-# define THINK	3
+# define NAP	1
+# define THINK	2
 
 enum e_conditions
 {
@@ -70,7 +70,6 @@ typedef struct s_philo
 	t_arg			*arg;
 }	t_philo;
 
-void		*ft_malloc(int size);
 size_t		ft_strlen(const char *str);
 int			ft_atoi(const char *str);
 int			ft_strchr_mod(const char *s, int c);
@@ -84,10 +83,13 @@ void		ft_get_time(t_philo *philo);
 int			ft_mute_death(t_philo *philo);
 int			ft_check_death(t_philo *philo);
 int			ft_eat(t_philo *philo);
-void		ft_take_fork(t_philo *philo, int fork);
+int			ft_left_check(t_philo *philo, int *check);
+int			ft_right_check(t_philo *philo, int *check);
+void		ft_take_fork(t_philo *philo);
 void		ft_nap(t_philo *philo);
 void		ft_think(t_philo *philo);
 
 void		ft_destroy_mutex(t_arg *arg);
+void		ft_free(t_philo **philos, t_arg *arg);
 
 #endif

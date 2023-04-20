@@ -10,8 +10,8 @@ O_DIR	=	OBJS
 
 BO_DIR	=	BONUS_OBJS
 
-#CC	=	gcc -Wall -Wextra -Werror
-CC	=	gcc -Wall -Wextra -Werror -g3 -fsanitize=thread
+CC	=	gcc -Wall -Wextra -Werror
+#CC	=	gcc -Wall -Wextra -Werror -g3 -fsanitize=thread
 
 NAME 	=	philo
 
