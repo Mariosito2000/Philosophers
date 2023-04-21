@@ -6,7 +6,7 @@
 /*   By: marias-e <marias-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 11:03:04 by marias-e          #+#    #+#             */
-/*   Updated: 2023/04/19 17:26:13 by marias-e         ###   ########.fr       */
+/*   Updated: 2023/04/21 12:04:19 by marias-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,8 @@ int			ft_eat(t_philo *philo);
 int			ft_left_check(t_philo *philo, int *check);
 int			ft_right_check(t_philo *philo, int *check);
 void		ft_take_fork(t_philo *philo);
-void		ft_nap(t_philo *philo);
-void		ft_think(t_philo *philo);
+int			ft_nap(t_philo *philo);
+int			ft_think(t_philo *philo);
 
 void		ft_destroy_mutex(t_arg *arg);
 void		ft_free(t_philo **philos, t_arg *arg);

@@ -6,7 +6,7 @@
 /*   By: marias-e <marias-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 12:50:59 by marias-e          #+#    #+#             */
-/*   Updated: 2023/04/20 12:44:01 by marias-e         ###   ########.fr       */
+/*   Updated: 2023/04/21 11:59:26 by marias-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,13 @@ int	ft_mute_death(t_philo *philo)
 void	ft_routine(t_philo *philo)
 {
 	philo->last_meal = philo->arg->start_time;
-	while (!ft_mute_death(philo))
+	while (TRUE)
 	{
-		ft_get_time(philo);
-		if (ft_check_death(philo))
-			break ;
 		if (philo->activity == EAT && ft_eat(philo))
 			break ;
-		if (philo->activity == NAP)
-			ft_nap(philo);
-		if (philo->activity == THINK)
-			ft_think(philo);
+		if (philo->activity == NAP && ft_nap(philo))
+			break ;
+		if (philo->activity == THINK && ft_think(philo))
+			break ;
 	}
 }

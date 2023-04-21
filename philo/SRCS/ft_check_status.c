@@ -6,7 +6,7 @@
 /*   By: marias-e <marias-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 10:27:44 by marias-e          #+#    #+#             */
-/*   Updated: 2023/04/20 12:53:02 by marias-e         ###   ########.fr       */
+/*   Updated: 2023/04/21 13:05:11 by marias-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 int	ft_check_death(t_philo *philo)
 {
+	if (ft_mute_death(philo))
+		return (1);
+	ft_get_time(philo);
 	if (philo->time - philo->last_meal
 		>= philo->arg->conditions[life_expectancy] * 1000)
 	{
@@ -73,43 +76,55 @@ int	ft_eat(t_philo *philo)
 	return (0);
 }
 
-void	ft_nap(t_philo *philo)
+int	ft_nap(t_philo *philo)
 {
-	if (philo->time >= philo->last_meal
-		+ (philo->arg->conditions[hunger] * 1000))
+	while (philo->activity == NAP)
 	{
-		pthread_mutex_lock(&philo->arg->printer_mutex);
-		if (philo->arg->can_print)
+		if (ft_check_death(philo))
+			return (1);
+		if (philo->time >= philo->last_meal
+			+ (philo->arg->conditions[hunger] * 1000))
 		{
-			ft_get_time(philo);
-			printf("\e[35m%ld %d is sleeping\n\e[0m", (philo->time
-					- philo->arg->start_time) / 1000, philo->id);
+			pthread_mutex_lock(&philo->arg->printer_mutex);
+			if (philo->arg->can_print)
+			{
+				ft_get_time(philo);
+				printf("\e[35m%ld %d is sleeping\n\e[0m", (philo->time
+						- philo->arg->start_time) / 1000, philo->id);
+			}
+			pthread_mutex_unlock(&philo->arg->printer_mutex);
+			pthread_mutex_lock(philo->right_m);
+			*philo->right_hand = FREE;
+			pthread_mutex_unlock(philo->right_m);
+			pthread_mutex_lock(philo->left_m);
+			*philo->left_hand = FREE;
+			pthread_mutex_unlock(philo->left_m);
+			philo->activity = THINK;
 		}
-		pthread_mutex_unlock(&philo->arg->printer_mutex);
-		pthread_mutex_lock(philo->right_m);
-		*philo->right_hand = FREE;
-		pthread_mutex_unlock(philo->right_m);
-		pthread_mutex_lock(philo->left_m);
-		*philo->left_hand = FREE;
-		pthread_mutex_unlock(philo->left_m);
-		philo->activity = THINK;
 	}
+	return (0);
 }
 
-void	ft_think(t_philo *philo)
+int	ft_think(t_philo *philo)
 {
-	if (philo->time >= philo->last_meal
-		+ (philo->arg->conditions[hunger] * 1000)
-		+ (philo->arg->conditions[nap_time] * 1000))
+	while (philo->activity == THINK)
 	{
-		pthread_mutex_lock(&philo->arg->printer_mutex);
-		if (philo->arg->can_print)
+		if (ft_check_death(philo))
+			return (1);
+		if (philo->time >= philo->last_meal
+			+ (philo->arg->conditions[hunger] * 1000)
+			+ (philo->arg->conditions[nap_time] * 1000))
 		{
-			ft_get_time(philo);
-			printf("\e[36m%ld %d is thinking\n\e[0m", (philo->time
-					- philo->arg->start_time) / 1000, philo->id);
+			pthread_mutex_lock(&philo->arg->printer_mutex);
+			if (philo->arg->can_print)
+			{
+				ft_get_time(philo);
+				printf("\e[36m%ld %d is thinking\n\e[0m", (philo->time
+						- philo->arg->start_time) / 1000, philo->id);
+			}
+			pthread_mutex_unlock(&philo->arg->printer_mutex);
+			philo->activity = EAT;
 		}
-		pthread_mutex_unlock(&philo->arg->printer_mutex);
-		philo->activity = EAT;
 	}
+	return (0);
 }
