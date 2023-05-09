@@ -6,7 +6,7 @@
 /*   By: marias-e <marias-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 11:03:04 by marias-e          #+#    #+#             */
-/*   Updated: 2023/04/21 12:04:19 by marias-e         ###   ########.fr       */
+/*   Updated: 2023/05/08 17:40:07 by marias-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,14 @@ typedef struct s_arg
 	pthread_mutex_t	*fork;
 	pthread_mutex_t	printer_mutex;
 	pthread_mutex_t	dead_mutex;
+	pthread_mutex_t	time_mutex;
 	int				dead;
 	int				can_print;
 	int				satisfaction;
 	int				*forkstate;
 	long int		start_time;
+	pthread_t		time_manager;
+	long int		time;
 }	t_arg;
 
 typedef struct s_philo
@@ -79,14 +82,20 @@ int			ft_manage_inputs(int argc, char **argv, int	*conditions);
 int			ft_create_academy(t_arg *arg, t_philo **philos);
 
 void		ft_routine(t_philo *philo);
+
+void		ft_manage_time(t_arg *arg);
 void		ft_get_time(t_philo *philo);
+void		ft_sleep(t_philo *philo, int action);
 int			ft_mute_death(t_philo *philo);
 int			ft_check_death(t_philo *philo);
+
 int			ft_eat(t_philo *philo);
 int			ft_left_check(t_philo *philo, int *check);
 int			ft_right_check(t_philo *philo, int *check);
 void		ft_take_fork(t_philo *philo);
+
 int			ft_nap(t_philo *philo);
+
 int			ft_think(t_philo *philo);
 
 void		ft_destroy_mutex(t_arg *arg);

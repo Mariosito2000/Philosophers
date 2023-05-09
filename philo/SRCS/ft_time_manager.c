@@ -1,34 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_time_manager.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marias-e <marias-e@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/11 11:36:04 by marias-e          #+#    #+#             */
-/*   Updated: 2023/05/08 13:36:23 by marias-e         ###   ########.fr       */
+/*   Created: 2023/04/24 16:01:15 by marias-e          #+#    #+#             */
+/*   Updated: 2023/05/08 18:16:32 by marias-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	main(int argc, char **argv)
+void	ft_manage_time(t_arg *arg)
 {
-	t_arg		arg;
-	t_philo		*philos;
-	int			out;
+	struct timeval	com_time;
+	int				dead;
 
-	out = 0;
-	philos = NULL;
-	arg.fork = NULL;
-	arg.forkstate = NULL;
-	if (argc < 5 || argc > 6)
-		return (1);
-	if (ft_manage_inputs(argc, argv, arg.conditions))
-		return (1);
-	if (ft_create_academy(&arg, &philos))
-		out = 1;
-	ft_destroy_mutex(&arg);
-	ft_free(&philos, &arg);
-	return (out);
+	dead = 0;
+	while (dead == 0)
+	{
+		pthread_mutex_lock(&arg->time_mutex);
+		gettimeofday(&com_time, 0);
+		arg->time = (com_time.tv_sec * 1000) + (com_time.tv_usec / 1000);
+		pthread_mutex_unlock(&arg->time_mutex);
+		pthread_mutex_lock(&arg->dead_mutex);
+		dead = arg->dead;
+		pthread_mutex_unlock(&arg->dead_mutex);
+		usleep(800);
+	}
 }
